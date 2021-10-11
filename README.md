@@ -8,3 +8,8 @@ This application's responsibilities are:
 * to hold a set of webhook from integrated projects, along with their configuration
 * to maintain a documented list of Public Events to be dispatched to webhooks, and to internally map IO core domain events with such Public Events
 
+## Public Events
+List of all Public Events emitted to registered webhooks
+
+| Event | Payload | Description 
+|:---:|:---:|:---:|
