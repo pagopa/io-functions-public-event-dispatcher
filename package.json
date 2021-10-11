@@ -1,8 +1,8 @@
 {
-  "name": "@pagopa/your-package-name",
+  "name": "@pagopa/io-functions-public-event-dispatcher",
   "description": "",
   "author": "IO team",
-  "repository": "https://github.com/pagopa/<YOUR PROJECT NAME>",
+  "repository": "https://github.com/pagopa/io-functions-public-event-dispatcher",
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
