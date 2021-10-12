@@ -61,18 +61,6 @@ services:
     networks:
       - io-fn
 
-  cosmosdb:
-    image: cosmosdb
-    env_file:
-      - .env
-    build:
-      context: ./
-      dockerfile: docker/cosmosdb/Dockerfile
-    ports:
-      - ${COSMOSDB_PORT}:3000
-    networks:
-      - io-fn
-
   traefik:
     image: traefik:v2.0
     command: |-
