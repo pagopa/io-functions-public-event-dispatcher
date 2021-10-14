@@ -6,6 +6,7 @@
  */
 
 import * as t from "io-ts";
+import { JsonFromString } from "io-ts-types/lib/JsonFromString";
 
 import * as E from "fp-ts/lib/Either";
 import { pipe } from "fp-ts/lib/function";
@@ -13,13 +14,24 @@ import { pipe } from "fp-ts/lib/function";
 import { readableReport } from "@pagopa/ts-commons/lib/reporters";
 import { NonEmptyString } from "@pagopa/ts-commons/lib/strings";
 
+import { withDefault } from "@pagopa/ts-commons/lib/types";
+import { WebhookConfig, EnabledWebhookCollection } from "./webhooks";
+
 // global app configuration
 export type IConfig = t.TypeOf<typeof IConfig>;
 // eslint-disable-next-line @typescript-eslint/ban-types
 export const IConfig = t.interface({
   AzureWebJobsStorage: NonEmptyString,
+  isProduction: t.boolean,
 
-  isProduction: t.boolean
+  // collection of webhooks registered to public events
+  webhooks: withDefault(
+    t.string
+      .pipe(JsonFromString)
+      .pipe(t.readonlyArray(WebhookConfig))
+      .pipe(EnabledWebhookCollection),
+    []
+  )
 });
 
 export const envConfig = {
