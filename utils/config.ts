@@ -22,6 +22,10 @@ export type IConfig = t.TypeOf<typeof IConfig>;
 // eslint-disable-next-line @typescript-eslint/ban-types
 export const IConfig = t.interface({
   AzureWebJobsStorage: NonEmptyString,
+
+  HTTP_CALL_JOB_QUEUE_NAME: NonEmptyString,
+  QueueStorageConnection: NonEmptyString,
+
   isProduction: t.boolean,
 
   // collection of webhooks registered to public events
