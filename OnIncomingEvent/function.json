@@ -1,0 +1,26 @@
+{
+  "bindings": [
+    {
+      "queueName": "%QUEUESTORAGE_APIEVENTS_EVENTS_QUEUE_NAME%",
+      "connection": "QUEUESTORAGE_APIEVENTS_CONNECTION_STRING",
+      "name": "incomingEvent",
+      "type": "queueTrigger",
+      "direction": "in"
+    },
+    {
+      "queueName": "%QUEUESTORAGE_APIEVENTS_EVENTS_QUEUE_NAME%",
+      "connection": "QUEUESTORAGE_APIEVENTS_CONNECTION_STRING",
+      "name": "remappedEvents",
+      "type": "queue",
+      "direction": "out"
+    },
+    {
+      "queueName": "%HTTP_CALL_JOB_QUEUE_NAME%",
+      "connection": "QueueStorageConnection",
+      "name": "httpCalls",
+      "type": "queue",
+      "direction": "out"
+    }
+  ],
+  "scriptFile": "../dist/OnIncomingEvent/index.js"
+}
