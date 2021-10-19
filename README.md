@@ -13,7 +13,7 @@ Incoming events are processed and propagated only when and to whom need to be no
 * `PublicEvent`s are events emitted by **IO** that are interesting for downstream subscribers, thus can be propagated;
 * `NonPublicEvent`s are events emitted by **IO** that are NOT interesting for downstream subscriber, thus need to be re-mapped into `PublicEvent`s
 
-![Events flow](/docs/evetns-flow.png)
+![Events flow](/docs/events-flow.png)
 [edit](https://excalidraw.com/#json=6579291928133632,C1u8ZCFxw3Y0miM1EnXroA)
 ### Public Events
 List of all Public Events emitted to registered webhooks
