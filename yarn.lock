@@ -751,6 +751,20 @@
     node-fetch "^2.6.0"
     validator "^10.1.0"
 
+"@pagopa/ts-commons@^10.2.1":
+  version "10.2.1"
+  resolved "https://registry.yarnpkg.com/@pagopa/ts-commons/-/ts-commons-10.2.1.tgz#4d96fb041d66160602c8b07b61462a851427feca"
+  integrity sha512-41RSIP+AzyUBn8zZ/DHO/+4L8HrKn4MFbtGZp6H1XDeom78fWj2y+VtY53pGH3uORMqKhAKbMdggvPO+iqMAYg==
+  dependencies:
+    abort-controller "^3.0.0"
+    agentkeepalive "^4.1.4"
+    applicationinsights "^1.8.10"
+    fp-ts "^2.11.0"
+    io-ts "^2.2.16"
+    json-set-map "^1.1.2"
+    node-fetch "^2.6.0"
+    validator "^10.1.0"
+
 "@sendgrid/client@^6.5.5":
   version "6.5.5"
   resolved "https://registry.yarnpkg.com/@sendgrid/client/-/client-6.5.5.tgz#66cf569445d98a795998a894bb432a9939ead7c3"
@@ -3659,6 +3673,11 @@ fp-ts@^2.10.5:
   version "2.11.1"
   resolved "https://registry.yarnpkg.com/fp-ts/-/fp-ts-2.11.1.tgz#b1eeb2540728b6328542664888442f8f805d2443"
   integrity sha512-CJOfs+Heq/erkE5mqH2mhpsxCKABGmcLyeEwPxtbTlkLkItGUs6bmk2WqjB2SgoVwNwzTE5iKjPQJiq06CPs5g==
+
+fp-ts@^2.11.0:
+  version "2.11.5"
+  resolved "https://registry.yarnpkg.com/fp-ts/-/fp-ts-2.11.5.tgz#97cceb26655b1452d7088d6fb0864f84cceffbe4"
+  integrity sha512-OqlwJq1BdpB83BZXTqI+dNcA6uYk6qk4u9Cgnt64Y+XS7dwdbp/mobx8S2KXf2AXH+scNmA/UVK3SEFHR3vHZA==
 
 fragment-cache@^0.2.1:
   version "0.2.1"
