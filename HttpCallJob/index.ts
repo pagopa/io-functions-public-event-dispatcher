@@ -18,7 +18,7 @@ import { HttpCallStruct } from "./types";
 const logPrefix = `HttpCallJob`;
 
 const is2xx = (r: Dispatcher.ResponseData): boolean =>
-  r.statusCode === 200 && r.statusCode < 300;
+  r.statusCode >= 200 && r.statusCode < 300;
 
 const index: AzureFunction = async (context: Context, input: unknown) =>
   pipe(
