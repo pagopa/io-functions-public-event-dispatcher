@@ -36,7 +36,7 @@ export const IncomingEvent = t.union([PublicEvent, NonPublicEvent]);
 // Map every incoming event with the eventual set of required attributes
 export const publicEventsRequiredAttributes: Record<
   PublicEvent["name"],
-  t.Type<Record<string, unknown>>
+  t.Mixed
 > = {
-  ping: empty
+  ping: t.interface({ name: NonEmptyString })
 };
