@@ -13,7 +13,6 @@ import * as RA from "fp-ts/lib/ReadonlyArray";
 
 import { readableReport } from "@pagopa/ts-commons/lib/reporters";
 
-import { NonEmptyString } from "@pagopa/ts-commons/lib/strings";
 import { EnabledWebhookCollection, WebhookConfig } from "../utils/webhooks";
 import { HttpCallStruct } from "../HttpCallJob/types";
 import {
@@ -22,16 +21,9 @@ import {
   PublicEvent,
   publicEventsRequiredAttributes
 } from "./events";
+import { hasAttribute, exclude } from "./utils";
 
 const logPrefix = `OnIncomingEvent`;
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const exclude = (obj: any, keysToRemove: ReadonlyArray<string>): any =>
-  typeof obj === "object"
-    ? Object.entries(obj)
-        .filter(([k]) => !keysToRemove.includes(k))
-        .reduce((p, [k, v]) => ({ ...p, [k]: v }), {})
-    : obj;
 
 /**
  * Compose a struct defining a http call to notify a webhook after an incoming event
@@ -76,15 +68,6 @@ const processPublicEvent = (webhooks: EnabledWebhookCollection) => (
     // append the notification to the http call queue
     RA.map(HttpCallStruct.encode)
   );
-
-const hasAttribute = <A extends string>(attributeName: A) => (
-  w: WebhookConfig
-): w is WebhookConfig & {
-  readonly disabled: false;
-  readonly attributes: { readonly name: NonEmptyString };
-} =>
-  typeof w.attributes[attributeName] === "string" &&
-  w.attributes[attributeName].length > 0;
 
 // Map a non-public event into a public event
 const remapNonPublicEvent = (webhooks: EnabledWebhookCollection) => (
