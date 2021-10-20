@@ -30,6 +30,13 @@ const webhookC = {
   subscriptions: ["fake-event"]
 };
 
+// A webhook subscribed to ping event, but without
+// having name attribute defined
+const webhookD = {
+  url: "https://example-b.com/webhook",
+  subscriptions: ["ping"]
+};
+
 const webhooks = pipe(
   Json.pipe(t.readonlyArray(WebhookConfig))
     .pipe(EnabledWebhookCollection)
@@ -69,6 +76,31 @@ describe("OnIncomingEvent", () => {
 
     await handler(context, event);
 
+    expect(context.bindings.remappedEvents).toBe(undefined);
+    expect(context.bindings.httpCalls).toHaveLength(1);
+    expect(JSON.parse(context.bindings.httpCalls[0])).toEqual({
+      headers: {},
+      body: { name: event.name, payload: {} },
+      url: webhookA.url
+    });
+  });
+
+  it("should handle a public event only for expected consumer", async () => {
+    const event = { name: "ping", payload: { name: webhookA.attributes.name } };
+
+    const context = createContext();
+
+    const webhooks = pipe(
+      Json.pipe(t.readonlyArray(WebhookConfig))
+        .pipe(EnabledWebhookCollection)
+        .decode([webhookA, webhookB, webhookC, webhookD]),
+      E.getOrElseW(err => fail(`Cannot decode: ${readableReport(err)}`))
+    );
+    const handler = OnIncomingEventHandler(webhooks);
+
+    await handler(context, event);
+
+    // We expect to call only webhookA, but we also call webhookD
     expect(context.bindings.remappedEvents).toBe(undefined);
     expect(context.bindings.httpCalls).toHaveLength(1);
     expect(JSON.parse(context.bindings.httpCalls[0])).toEqual({
