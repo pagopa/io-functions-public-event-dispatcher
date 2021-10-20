@@ -33,7 +33,7 @@ const webhookC = {
 // A webhook subscribed to ping event, but without
 // having name attribute defined
 const webhookD = {
-  url: "https://example-b.com/webhook",
+  url: "https://example-D.com/webhook",
   subscriptions: ["ping"]
 };
 
