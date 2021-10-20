@@ -66,11 +66,9 @@ const processPublicEvent = (webhooks: EnabledWebhookCollection) => (
     ),
     // consider only webhooks which attributes match with the ones in the incoming event
     RA.filter(webhook =>
-      Object.entries(publicEvent.payload)
-        .map(([k, v]) =>
-          k in webhook.attributes ? webhook.attributes[k] === v : true
-        )
-        .every(Boolean)
+      Object.entries(publicEvent.payload).every(([k, v]) =>
+        k in webhook.attributes ? webhook.attributes[k] === v : true
+      )
     ),
     // compose a http call for each webhook
     RA.map(webhook => composeWebhookNotification(publicEvent, webhook)),
