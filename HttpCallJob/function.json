@@ -1,0 +1,12 @@
+{
+  "bindings": [
+    {
+      "queueName": "%HTTP_CALL_JOB_QUEUE_NAME%",
+      "connection": "QueueStorageConnection",
+      "name": "httpCallStruct",
+      "type": "queueTrigger",
+      "direction": "in"
+    }
+  ],
+  "scriptFile": "../dist/HttpCallJob/index.js"
+}

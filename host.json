@@ -5,6 +5,10 @@
       "default": "Trace"
     }
   },
+  "extensionBundle": {
+    "id": "Microsoft.Azure.Functions.ExtensionBundle.Preview",
+    "version": "[3.*, 4.0.0)"
+  },
   "extensions": {
     "http": {
       "routePrefix": ""
