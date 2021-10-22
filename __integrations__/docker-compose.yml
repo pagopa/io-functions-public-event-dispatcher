@@ -68,6 +68,7 @@ services:
     ports:
       - 8001:8001
       - 8002:8002
+      - 8003:8003
     depends_on:
       - fixtures
       - storage-account
