@@ -5,7 +5,6 @@
  */
 
 import * as t from "io-ts";
-import { Context } from "@azure/functions";
 import { pipe } from "fp-ts/lib/function";
 
 import * as E from "fp-ts/lib/Either";
@@ -15,6 +14,7 @@ import { readableReport } from "@pagopa/ts-commons/lib/reporters";
 
 import { EnabledWebhookCollection, WebhookConfig } from "../utils/webhooks";
 import { HttpCallStruct } from "../HttpCallJob/types";
+import { withJsonInput } from "../utils/misc";
 import {
   IncomingEvent,
   NonPublicEvent,
@@ -99,39 +99,39 @@ const remapNonPublicEvent = (webhooks: EnabledWebhookCollection) => (
  */
 export const OnIncomingEventHandler = (
   webhooks: EnabledWebhookCollection
-) => async (context: Context, input: unknown): Promise<void> => {
-  pipe(
-    input,
-    IncomingEvent.decode,
+): Parameters<typeof withJsonInput>[0] =>
+  withJsonInput(async (context, input) => {
+    pipe(
+      input,
+      IncomingEvent.decode,
+      E.map(incomingEvent =>
+        PublicEvent.is(incomingEvent)
+          ? // if the incoming event is a public event, we may proceed to notify webhooks
+            pipe(
+              processPublicEvent(webhooks)(incomingEvent),
+              RA.map(JSON.stringify),
+              messages => {
+                // eslint-disable-next-line functional/immutable-data
+                context.bindings.httpCalls = messages;
+              }
+            )
+          : // otherwise, we must re-map the incoming event into its relative public events to be re-submitted to the queue in order to be processed
+            pipe(
+              remapNonPublicEvent(webhooks)(incomingEvent),
+              RA.map(JSON.stringify),
+              messages => {
+                // eslint-disable-next-line functional/immutable-data
+                context.bindings.remappedEvents = messages;
+              }
+            )
+      ),
 
-    E.map(incomingEvent =>
-      PublicEvent.is(incomingEvent)
-        ? // if the incoming event is a public event, we may proceed to notify webhooks
-          pipe(
-            processPublicEvent(webhooks)(incomingEvent),
-            RA.map(JSON.stringify),
-            messages => {
-              // eslint-disable-next-line functional/immutable-data
-              context.bindings.httpCalls = messages;
-            }
-          )
-        : // otherwise, we must re-map the incoming event into its relative public events to be re-submitted to the queue in order to be processed
-          pipe(
-            remapNonPublicEvent(webhooks)(incomingEvent),
-            RA.map(JSON.stringify),
-            messages => {
-              // eslint-disable-next-line functional/immutable-data
-              context.bindings.remappedEvents = messages;
-            }
-          )
-    ),
-
-    // the handler fails if the incoming message is malformed
-    E.getOrElseW(err => {
-      context.log.error(
-        `${logPrefix}|invalid incoming event|${readableReport(err)}`
-      );
-      throw new Error(`Cannot handle incoming event: ${readableReport(err)}`);
-    })
-  );
-};
+      // the handler fails if the incoming message is malformed
+      E.getOrElseW(err => {
+        context.log.error(
+          `${logPrefix}|invalid incoming event|${readableReport(err)}`
+        );
+        throw new Error(`Cannot handle incoming event: ${readableReport(err)}`);
+      })
+    );
+  }, logPrefix);

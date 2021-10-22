@@ -1,6 +1,9 @@
 import * as t from "io-ts";
 import { identity } from "fp-ts/lib/function";
-import { HttpsUrlFromString } from "@pagopa/ts-commons/lib/url";
+import {
+  HttpsUrlFromString,
+  HttpUrlFromString
+} from "@pagopa/ts-commons/lib/url";
 import { CommaSeparatedListOf } from "@pagopa/ts-commons/lib/comma-separated-list";
 import { withDefault } from "@pagopa/ts-commons/lib/types";
 import { NonEmptyString } from "io-ts-types";
@@ -19,7 +22,7 @@ export const WebhookConfig = t.interface({
   // list of events the webhook registers to
   subscriptions: CommaSeparatedListOf(t.string),
   // the url which identifies the webhook
-  url: HttpsUrlFromString
+  url: t.union([HttpUrlFromString, HttpsUrlFromString])
 });
 
 type EnabledWebhookConfig = t.TypeOf<typeof EnabledWebhookConfig>;
