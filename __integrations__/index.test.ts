@@ -6,9 +6,9 @@ import {
   startServer,
   closeAll
 } from "./utils/misc";
-import { WH1_PORT, WH2_PORT, WH3_PORT } from "./env";
+import { WH1_PORT, WH2_PORT, WH3_PORT, WAIT_MS } from "./env";
 
-jest.setTimeout(30000);
+jest.setTimeout(WAIT_MS * 5);
 
 // eslint-disable-next-line functional/no-let
 let allServers: ReadonlyArray<Server>;
@@ -33,7 +33,7 @@ describe("Event |> ping", () => {
     };
     void enqueueMessage(msg);
 
-    await delay(5000);
+    await delay(WAIT_MS);
 
     expect(spyW1).toHaveBeenCalledTimes(1);
     expect(spyW2).not.toHaveBeenCalled();
@@ -54,7 +54,7 @@ describe("Event |> ping", () => {
         void enqueueMessage(msg);
       }
 
-      await delay(5000);
+      await delay(WAIT_MS);
 
       expect(spyW1).toHaveBeenCalledTimes(n);
       expect(spyW2).not.toHaveBeenCalled();
@@ -92,7 +92,7 @@ describe("Event |> ping", () => {
     void enqueueMessage(msg1);
     void enqueueMessage(msg2);
 
-    await delay(5000);
+    await delay(WAIT_MS);
 
     expect(spyW2).toHaveBeenCalledTimes(1);
     expect(spyW1).toHaveBeenCalledTimes(1);
@@ -107,7 +107,7 @@ describe("Event |> ping:all", () => {
     const msg = { name: "ping:all" };
     void enqueueMessage(msg);
 
-    await delay(5000);
+    await delay(WAIT_MS);
 
     expect(spyW2).toHaveBeenCalledTimes(1);
     expect(spyW1).toHaveBeenCalledTimes(1);

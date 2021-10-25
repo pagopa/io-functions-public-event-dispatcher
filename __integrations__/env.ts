@@ -11,3 +11,6 @@ export const HTTP_CALL_JOB_QUEUE_NAME =
 export const WH1_PORT = Number(process.env.WH1_PORT || 8001);
 export const WH2_PORT = Number(process.env.WH2_PORT || 8002);
 export const WH3_PORT = Number(process.env.WH3_PORT || 8003);
+
+// Milliseconds to wait for test completion
+export const WAIT_MS = Number(process.env.WH1_PORT || 5000);
