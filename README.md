@@ -50,5 +50,5 @@ docker-compose up
 # execute tests
 yarn install --frozen-lockfile
 docker exec integrations___testagent_1 yarn start
-#           ^^^ FIXME: referecen container using a less arbitrary name
+#           ^^^ FIXME: reference container using a less arbitrary name
 ```
