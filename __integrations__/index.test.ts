@@ -31,7 +31,7 @@ describe("Event |> ping", () => {
       name: "ping",
       payload: { name: "wh1" }
     };
-    void enqueueMessage(msg);
+    await enqueueMessage(msg);
 
     await delay(WAIT_MS);
 
@@ -51,7 +51,7 @@ describe("Event |> ping", () => {
           name: "ping",
           payload: { name: "wh1" }
         };
-        void enqueueMessage(msg);
+        await enqueueMessage(msg);
       }
 
       await delay(WAIT_MS);
@@ -69,7 +69,7 @@ describe("Event |> ping", () => {
       name: "ping",
       payload: { name: "wh2" }
     };
-    void enqueueMessage(msg);
+    await enqueueMessage(msg);
 
     await delay(5000);
 
@@ -89,8 +89,8 @@ describe("Event |> ping", () => {
       name: "ping",
       payload: { name: "wh2" }
     };
-    void enqueueMessage(msg1);
-    void enqueueMessage(msg2);
+    await enqueueMessage(msg1);
+    await enqueueMessage(msg2);
 
     await delay(WAIT_MS);
 
@@ -105,7 +105,7 @@ describe("Event |> ping:all", () => {
     const [spyW1, spyW2, spyW3] = spyRequests(allServers);
 
     const msg = { name: "ping:all" };
-    void enqueueMessage(msg);
+    await enqueueMessage(msg);
 
     await delay(WAIT_MS);
 
