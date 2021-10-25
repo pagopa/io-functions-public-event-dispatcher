@@ -63,7 +63,6 @@ services:
       WH1_PORT: 8001
       WH2_PORT: 8002
       WH3_PORT: 8003
-      WAIT_MS: 10000
     volumes:
       - "./:/usr/src/app"
     ports:
