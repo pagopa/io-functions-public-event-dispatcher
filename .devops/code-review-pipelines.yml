@@ -78,3 +78,30 @@ stages:
         - bash: |
             bash <(curl -s https://codecov.io/bash)
           displayName: 'Code coverage'
+
+  - stage: Build
+    dependsOn: []
+    jobs:
+      - job: make_build   
+        steps:
+        - template: templates/node-job-setup/template.yaml@pagopaCommons
+        - script: |
+            yarn build
+          displayName: 'Build'
+
+        - script: |
+            cd __integrations__
+            docker-compose up -d
+          displayName: 'Start test resources'
+
+        - script: |
+            cd __integrations__
+            yarn install --frozen-lockfile
+            docker exec integrations___testagent_1 yarn start
+            #           ^^^ FIXME: referecen container using a less arbitrary name
+          displayName: 'Execute tests'
+
+        - script: |
+            cd __integrations__
+            docker-compose down
+          displayName: 'Shutdown test resources'
