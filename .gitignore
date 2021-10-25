@@ -52,6 +52,7 @@ generated
 *.js
 !jest.config.js
 !.release-it.js
+!docker/fixtures/*.js
 
 # ESLint files
 !.eslintrc.js
