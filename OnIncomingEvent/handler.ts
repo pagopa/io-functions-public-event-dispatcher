@@ -8,10 +8,12 @@ import * as t from "io-ts";
 import { pipe } from "fp-ts/lib/function";
 
 import * as E from "fp-ts/lib/Either";
+import * as O from "fp-ts/lib/Option";
 import * as RA from "fp-ts/lib/ReadonlyArray";
 
 import { readableReport } from "@pagopa/ts-commons/lib/reporters";
 
+import { ServicesPreferencesModeEnum } from "@pagopa/io-functions-commons/dist/generated/definitions/ServicesPreferencesMode";
 import { EnabledWebhookCollection, WebhookConfig } from "../utils/webhooks";
 import { HttpCallStruct } from "../HttpCallJob/types";
 import { withJsonInput } from "../utils/misc";
@@ -22,6 +24,8 @@ import {
   publicEventsRequiredAttributes
 } from "./events";
 import { hasAttribute, exclude } from "./utils";
+
+const defaultNever = <T>(_: never, defVal: T): T => defVal;
 
 const logPrefix = `OnIncomingEvent`;
 
@@ -86,8 +90,33 @@ const remapNonPublicEvent = (webhooks: EnabledWebhookCollection) => (
         })),
         RA.map(PublicEvent.encode)
       );
+    // If a profile is completed with subscription mode AUTO, propagate a subscription event for all registered webhooks
+    // OR, if a Citizen switch to AUTO, it means it's subscribed to all services
+    case "profile:completed":
+    case "profile:service-preferences-changed":
+      return pipe(
+        publicEvent.payload.servicePreferencesMode ===
+          ServicesPreferencesModeEnum.AUTO
+          ? O.some(publicEvent)
+          : O.none,
+        O.map(evt =>
+          pipe(
+            webhooks,
+            RA.filter(hasAttribute("serviceId")),
+            RA.map(w => ({
+              name: "service:subscribed" as const,
+              payload: {
+                fiscalCode: evt.payload.fiscalCode,
+                serviceId: w.attributes.serviceId
+              }
+            }))
+          )
+        ),
+        O.getOrElseW(() => []),
+        RA.map(PublicEvent.encode)
+      );
     default:
-      return [];
+      return defaultNever(publicEvent, []);
   }
 };
 
