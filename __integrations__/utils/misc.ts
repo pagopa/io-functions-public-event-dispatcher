@@ -48,12 +48,40 @@ export const usingServers = async (
   }
 };
 
+const getBody = (r: IncomingMessage): Promise<string> =>
+  new Promise((resolve, reject) => {
+    let body = [];
+
+    r.on("readable", function() {
+      const chunk = r.read();
+      body.push(chunk);
+    });
+    r.on("end", function() {
+      resolve(body.join(""));
+    });
+
+    r.on("error", reject);
+  });
+
+type IncomingMessageWithBody = IncomingMessage & {
+  body: string;
+};
+
 export const spyRequests = (
-  servers: ReadonlyArray<Server>
-): ReadonlyArray<jest.Mock<IncomingMessage>> =>
+  servers: ReadonlyArray<Server>,
+  ttl = env.WAIT_MS // how many milliseconds before discarding the listener
+): ReadonlyArray<jest.Mock<void, [IncomingMessageWithBody]>> =>
   servers.map(server => {
     const spy = jest.fn();
-    server.addListener("request", spy);
+    const listener = async r => {
+      const body = await getBody(r);
+      spy({ ...r, body });
+    };
+    server.addListener("request", listener);
+    // this is a trick to not add too many listeners to a server
+    setTimeout(() => {
+      server.removeListener("request", listener);
+    }, ttl);
     return spy;
   });
 

@@ -36,7 +36,7 @@ services:
       HTTP_CALL_JOB_QUEUE_NAME: emanuelehttpjobqueue
       AZURE_ENABLE_STRICT_SSL: 'false'
       NODE_TLS_REJECT_UNAUTHORIZED: 0 
-      webhooks: '[{"url":"http:\/\/testagent:8001\/wh","subscriptions":["ping"],"attributes":{"name":"wh1"}}, {"url":"http:\/\/testagent:8002\/wh","subscriptions":["ping"],"attributes":{"name":"wh2"}}, {"url":"http:\/\/testagent:8003\/wh","subscriptions":[]}]'
+      webhooks: '[{"url":"http:\/\/testagent:8001\/wh","subscriptions":["ping"],"attributes":{"name":"wh1"}}, {"url":"http:\/\/testagent:8002\/wh","subscriptions":["ping", "service:subscribed"],"attributes":{"name":"wh2", "serviceId": "aServiceId12345"}}, {"url":"http:\/\/testagent:8003\/wh","subscriptions":["service:subscribed"], "attributes":{"serviceId":"aServiceId09876"}}]'
     build:
       context: ../docker/functions
       dockerfile: ./Dockerfile
