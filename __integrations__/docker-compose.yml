@@ -1,0 +1,74 @@
+version: "3.2"
+
+services:
+  storage-account:
+    image: azurite
+    build:
+      context: ../docker/azurite
+      dockerfile: ./Dockerfile
+    ports:
+      - 10000:10000
+      - 10001:10001
+      - 10002:10002
+
+  fixtures:
+    image: fixtures
+    environment: 
+      QueueStorageConnection: DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://storage-account:10000/devstoreaccount1;QueueEndpoint=http://storage-account:10001/devstoreaccount1;
+      QUEUESTORAGE_APIEVENTS_CONNECTION_STRING: DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://storage-account:10000/devstoreaccount1;QueueEndpoint=http://storage-account:10001/devstoreaccount1;
+      QUEUESTORAGE_APIEVENTS_EVENTS_QUEUE_NAME: emanuelequeueapievents
+      HTTP_CALL_JOB_QUEUE_NAME: emanuelehttpjobqueue
+      AZURE_ENABLE_STRICT_SSL: 'false'
+      NODE_TLS_REJECT_UNAUTHORIZED: 0 
+    build:
+      context: ../docker/fixtures
+      dockerfile: ./Dockerfile
+    depends_on:
+      - storage-account
+
+  function:
+    image: fn
+    environment: 
+      AzureWebJobsStorage: DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://storage-account:10000/devstoreaccount1;QueueEndpoint=http://storage-account:10001/devstoreaccount1;
+      QueueStorageConnection: DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://storage-account:10000/devstoreaccount1;QueueEndpoint=http://storage-account:10001/devstoreaccount1;
+      QUEUESTORAGE_APIEVENTS_CONNECTION_STRING: DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://storage-account:10000/devstoreaccount1;QueueEndpoint=http://storage-account:10001/devstoreaccount1;
+      QUEUESTORAGE_APIEVENTS_EVENTS_QUEUE_NAME: emanuelequeueapievents
+      HTTP_CALL_JOB_QUEUE_NAME: emanuelehttpjobqueue
+      AZURE_ENABLE_STRICT_SSL: 'false'
+      NODE_TLS_REJECT_UNAUTHORIZED: 0 
+      webhooks: '[{"url":"http:\/\/testagent:8001\/wh","subscriptions":["ping"],"attributes":{"name":"wh1"}}, {"url":"http:\/\/testagent:8002\/wh","subscriptions":["ping"],"attributes":{"name":"wh2"}}, {"url":"http:\/\/testagent:8003\/wh","subscriptions":[]}]'
+    build:
+      context: ../docker/functions
+      dockerfile: ./Dockerfile
+    volumes:
+      - "../:/usr/src/app"
+    links:
+      - testagent
+    depends_on:
+      - storage-account
+      - fixtures
+
+  testagent:
+    image: node:16-alpine
+    working_dir: /usr/src/app
+    command: tail -f /dev/null # to keep it up&running
+    environment: 
+      AzureWebJobsStorage: DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://storage-account:10000/devstoreaccount1;QueueEndpoint=http://storage-account:10001/devstoreaccount1;
+      QueueStorageConnection: DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://storage-account:10000/devstoreaccount1;QueueEndpoint=http://storage-account:10001/devstoreaccount1;
+      QUEUESTORAGE_APIEVENTS_CONNECTION_STRING: DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://storage-account:10000/devstoreaccount1;QueueEndpoint=http://storage-account:10001/devstoreaccount1;
+      QUEUESTORAGE_APIEVENTS_EVENTS_QUEUE_NAME: emanuelequeueapievents
+      HTTP_CALL_JOB_QUEUE_NAME: emanuelehttpjobqueue
+      AZURE_ENABLE_STRICT_SSL: 'false'
+      NODE_TLS_REJECT_UNAUTHORIZED: 0 
+      WH1_PORT: 8001
+      WH2_PORT: 8002
+      WH3_PORT: 8003
+    volumes:
+      - "./:/usr/src/app"
+    ports:
+      - 8001:8001
+      - 8002:8002
+      - 8003:8003
+    depends_on:
+      - fixtures
+      - storage-account
