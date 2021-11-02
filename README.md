@@ -19,8 +19,9 @@ Incoming events are processed and propagated only when and to whom need to be no
 List of all Public Events emitted to registered webhooks
 
 | Event | Payload | Description | Required attributes
-|:---:|:---:|:---:|
+|:---:|:---:|:---:|:---:|
 |`ping`| `name: the name of the webhook to be pinged` |Just a ping on a registered webhook, used for testing the system. This event is used mainly for testing purposes.| `name`|
+|`service:subscribed`| `serviceId`, `fiscalCode` |Emitted when a Citizen subscribes to a Service| `serviceId`|
 
 ### NonPublic Events
 List of all Non-Public Events received by the application. These are the events that are accepted by the dispatcher, but will be then re-mapped into public events.
@@ -28,6 +29,8 @@ List of all Non-Public Events received by the application. These are the events 
 | Event | Payload | Description | Required attributes
 |:---:|:---:|:---:|:---:|
 |`ping:all`| - |Just a ping on ALL registered webhooks, used for testing the system. This event is used mainly for testing purposes.| - |
+|`profile:completed`| `fiscalCode`, `servicePreferencesMode` | When a Citizen completes their onboarding process on IO. This _may_ emit `service:subscribed` for every registered downstream services|-|
+|`profile:service-preferences-changed`| `fiscalCode`, `servicePreferencesMode`, `oldServicePreferencesMode` | When a Citizen changes how they want to handle Service subscriptions. This _may_ emit `service:subscribed` for every registered downstream services|-|
 
 ## Testing
 Integration tests are defined into `__integrations__`  folder. Tests are performed in a containerized, isolated context so that are reproducible at any time and in every environment. A test agent is used to act as both event producer and webhook consumer, so that it can verify the correct executions of workflows. The following is a simple schema that gives the idea:
@@ -52,3 +55,4 @@ yarn install --frozen-lockfile
 docker exec integrations___testagent_1 yarn start
 #           ^^^ FIXME: reference container using a less arbitrary name
 ```
+

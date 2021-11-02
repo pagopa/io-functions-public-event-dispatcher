@@ -23,6 +23,8 @@ afterAll(async () => closeAll(allServers));
 
 beforeEach(() => jest.clearAllMocks());
 
+const aFiscalCode = "AAABBB00A00A000B";
+
 describe("Event |> ping", () => {
   it("should notify wh1 on when ping is for wh1", async () => {
     const [spyW1, spyW2, spyW3] = spyRequests(allServers);
@@ -112,5 +114,153 @@ describe("Event |> ping:all", () => {
     expect(spyW2).toHaveBeenCalledTimes(1);
     expect(spyW1).toHaveBeenCalledTimes(1);
     expect(spyW3).not.toHaveBeenCalled();
+  });
+});
+
+describe("Event |> service:subscribed", () => {
+  it("should notify only wh2 when a subscrition event is emitted", async () => {
+    const [spyW1, spyW2, spyW3] = spyRequests(allServers);
+
+    // same value as in webhooks setup for wh2
+    const serviceId = "aServiceId12345";
+
+    const msg = {
+      name: "service:subscribed",
+      payload: { serviceId, fiscalCode: aFiscalCode }
+    };
+    await enqueueMessage(msg);
+
+    await delay(WAIT_MS);
+
+    expect(spyW2).toHaveBeenCalledTimes(1);
+    expect(spyW1).not.toHaveBeenCalled();
+    expect(spyW3).not.toHaveBeenCalled();
+
+    const req = spyW2.mock.calls[0][0];
+
+    expect(JSON.parse(req.body)).toEqual({
+      name: "service:subscribed",
+      payload: { fiscalCode: aFiscalCode }
+    });
+  });
+
+  it("should notify nobody when a subscrition event is emitted for an unmapped service", async () => {
+    const [spyW1, spyW2, spyW3] = spyRequests(allServers);
+
+    const serviceId = "aServiceThatDoesNotExist";
+
+    const msg = {
+      name: "service:subscribed",
+      payload: { serviceId, fiscalCode: aFiscalCode }
+    };
+    await enqueueMessage(msg);
+
+    await delay(WAIT_MS);
+
+    expect(spyW1).not.toHaveBeenCalled();
+    expect(spyW2).not.toHaveBeenCalled();
+    expect(spyW3).not.toHaveBeenCalled();
+  });
+
+  describe("Event |> profile:service-preferences-changed", () => {
+    it("should notify wh2 and wh3 when a profile changes its preference mode to AUTO", async () => {
+      const [spyW1, spyW2, spyW3] = spyRequests(allServers);
+
+      const msg = {
+        name: "profile:service-preferences-changed",
+        payload: {
+          fiscalCode: aFiscalCode,
+          servicePreferencesMode: "AUTO",
+          oldServicePreferencesMode: "MANUAL"
+        }
+      };
+      await enqueueMessage(msg);
+
+      await delay(WAIT_MS);
+
+      expect(spyW2).toHaveBeenCalledTimes(1);
+      expect(spyW3).toHaveBeenCalledTimes(1);
+      expect(spyW1).not.toHaveBeenCalled();
+
+      const receivedByWH2 = spyW2.mock.calls[0][0].body;
+      const receivedByWH3 = spyW3.mock.calls[0][0].body;
+
+      expect(JSON.parse(receivedByWH2)).toEqual({
+        name: "service:subscribed",
+        payload: { fiscalCode: aFiscalCode }
+      });
+
+      expect(JSON.parse(receivedByWH3)).toEqual({
+        name: "service:subscribed",
+        payload: { fiscalCode: aFiscalCode }
+      });
+    });
+
+    it("should notify nobody when a profile changes its preference mode to MANUAL", async () => {
+      const [spyW1, spyW2, spyW3] = spyRequests(allServers);
+
+      const msg = {
+        name: "profile:service-preferences-changed",
+        payload: {
+          fiscalCode: aFiscalCode,
+          servicePreferencesMode: "MANUAL",
+          oldServicePreferencesMode: "AUTO"
+        }
+      };
+      await enqueueMessage(msg);
+
+      await delay(WAIT_MS);
+
+      expect(spyW1).not.toHaveBeenCalled();
+      expect(spyW2).not.toHaveBeenCalled();
+      expect(spyW3).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("Event |> profile:completed", () => {
+    it("should notify wh2 and wh3 when a profile is completed and its preference mode is AUTO", async () => {
+      const [spyW1, spyW2, spyW3] = spyRequests(allServers);
+
+      const msg = {
+        name: "profile:completed",
+        payload: { fiscalCode: aFiscalCode, servicePreferencesMode: "AUTO" }
+      };
+      await enqueueMessage(msg);
+
+      await delay(WAIT_MS);
+
+      expect(spyW2).toHaveBeenCalledTimes(1);
+      expect(spyW3).toHaveBeenCalledTimes(1);
+      expect(spyW1).not.toHaveBeenCalled();
+
+      const receivedByWH2 = spyW2.mock.calls[0][0].body;
+      const receivedByWH3 = spyW3.mock.calls[0][0].body;
+
+      expect(JSON.parse(receivedByWH2)).toEqual({
+        name: "service:subscribed",
+        payload: { fiscalCode: aFiscalCode }
+      });
+
+      expect(JSON.parse(receivedByWH3)).toEqual({
+        name: "service:subscribed",
+        payload: { fiscalCode: aFiscalCode }
+      });
+    });
+
+    it("should notify nobody when a profile is completed and its preference mode is MANUAL", async () => {
+      const [spyW1, spyW2, spyW3] = spyRequests(allServers);
+
+      const msg = {
+        name: "profile:completed",
+        payload: { fiscalCode: aFiscalCode, servicePreferencesMode: "MANUAL" }
+      };
+      await enqueueMessage(msg);
+
+      await delay(WAIT_MS);
+
+      expect(spyW1).not.toHaveBeenCalled();
+      expect(spyW2).not.toHaveBeenCalled();
+      expect(spyW3).not.toHaveBeenCalled();
+    });
   });
 });
