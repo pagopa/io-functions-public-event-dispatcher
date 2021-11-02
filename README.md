@@ -31,3 +31,28 @@ List of all Non-Public Events received by the application. These are the events 
 |`ping:all`| - |Just a ping on ALL registered webhooks, used for testing the system. This event is used mainly for testing purposes.| - |
 |`profile:completed`| `fiscalCode`, `servicePreferencesMode` | When a Citizen completes their onboarding process on IO. This _may_ emit `service:subscribed` for every registered downstream services|-|
 |`profile:service-preferences-changed`| `fiscalCode`, `servicePreferencesMode`, `oldServicePreferencesMode` | When a Citizen changes how they want to handle Service subscriptions. This _may_ emit `service:subscribed` for every registered downstream services|-|
+
+## Testing
+Integration tests are defined into `__integrations__`  folder. Tests are performed in a containerized, isolated context so that are reproducible at any time and in every environment. A test agent is used to act as both event producer and webhook consumer, so that it can verify the correct executions of workflows. The following is a simple schema that gives the idea:
+
+![Events flow](/docs/test-flow.png)
+[edit](https://excalidraw.com/#json=5677494690643968,FiISx_BvMMDvhOHx3sJaxg)
+
+### Run tests
+
+```sh
+# an already-built application is supposed
+yarn install --frozen-lockfile
+yarn build
+
+cd __integrations__
+
+# start the containerized environment
+docker-compose up
+
+# execute tests
+yarn install --frozen-lockfile
+docker exec integrations___testagent_1 yarn start
+#           ^^^ FIXME: reference container using a less arbitrary name
+```
+

@@ -12,6 +12,7 @@
   },
   "exclude": [
     "__mocks__",
+    "__integrations__",
     "dist",
     "node_modules",
     "**/__tests__/*",
