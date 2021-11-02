@@ -16,8 +16,8 @@ services:
     environment: 
       QueueStorageConnection: DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://storage-account:10000/devstoreaccount1;QueueEndpoint=http://storage-account:10001/devstoreaccount1;
       QUEUESTORAGE_APIEVENTS_CONNECTION_STRING: DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://storage-account:10000/devstoreaccount1;QueueEndpoint=http://storage-account:10001/devstoreaccount1;
-      QUEUESTORAGE_APIEVENTS_EVENTS_QUEUE_NAME: emanuelequeueapievents
-      HTTP_CALL_JOB_QUEUE_NAME: emanuelehttpjobqueue
+      QUEUESTORAGE_APIEVENTS_EVENTS_QUEUE_NAME: integrationsqueueapievents
+      HTTP_CALL_JOB_QUEUE_NAME: integrationshttpjobqueue
       AZURE_ENABLE_STRICT_SSL: 'false'
       NODE_TLS_REJECT_UNAUTHORIZED: 0 
     build:
@@ -32,8 +32,8 @@ services:
       AzureWebJobsStorage: DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://storage-account:10000/devstoreaccount1;QueueEndpoint=http://storage-account:10001/devstoreaccount1;
       QueueStorageConnection: DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://storage-account:10000/devstoreaccount1;QueueEndpoint=http://storage-account:10001/devstoreaccount1;
       QUEUESTORAGE_APIEVENTS_CONNECTION_STRING: DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://storage-account:10000/devstoreaccount1;QueueEndpoint=http://storage-account:10001/devstoreaccount1;
-      QUEUESTORAGE_APIEVENTS_EVENTS_QUEUE_NAME: emanuelequeueapievents
-      HTTP_CALL_JOB_QUEUE_NAME: emanuelehttpjobqueue
+      QUEUESTORAGE_APIEVENTS_EVENTS_QUEUE_NAME: integrationsqueueapievents
+      HTTP_CALL_JOB_QUEUE_NAME: integrationshttpjobqueue
       AZURE_ENABLE_STRICT_SSL: 'false'
       NODE_TLS_REJECT_UNAUTHORIZED: 0 
       webhooks: '[{"url":"http:\/\/testagent:8001\/wh","subscriptions":["ping"],"attributes":{"name":"wh1"}}, {"url":"http:\/\/testagent:8002\/wh","subscriptions":["ping"],"attributes":{"name":"wh2"}}, {"url":"http:\/\/testagent:8003\/wh","subscriptions":[]}]'
@@ -56,8 +56,8 @@ services:
       AzureWebJobsStorage: DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://storage-account:10000/devstoreaccount1;QueueEndpoint=http://storage-account:10001/devstoreaccount1;
       QueueStorageConnection: DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://storage-account:10000/devstoreaccount1;QueueEndpoint=http://storage-account:10001/devstoreaccount1;
       QUEUESTORAGE_APIEVENTS_CONNECTION_STRING: DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://storage-account:10000/devstoreaccount1;QueueEndpoint=http://storage-account:10001/devstoreaccount1;
-      QUEUESTORAGE_APIEVENTS_EVENTS_QUEUE_NAME: emanuelequeueapievents
-      HTTP_CALL_JOB_QUEUE_NAME: emanuelehttpjobqueue
+      QUEUESTORAGE_APIEVENTS_EVENTS_QUEUE_NAME: integrationsqueueapievents
+      HTTP_CALL_JOB_QUEUE_NAME: integrationshttpjobqueue
       AZURE_ENABLE_STRICT_SSL: 'false'
       NODE_TLS_REJECT_UNAUTHORIZED: 0 
       WH1_PORT: 8001
