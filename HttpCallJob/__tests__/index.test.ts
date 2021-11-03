@@ -131,4 +131,42 @@ describe("HttpCallJob", () => {
       await HttpCallJob(mockContext, httpCall);
       expect(spiedRequest).toBeCalledTimes(1);
     }));
+
+  it("should use keep-alive", () =>
+    usingServer(aServerThasAlwaysSucceed, async server => {
+      const path = "/custom-path";
+      const body = { foo: 123 };
+      const headers = { "my-header": "my-header-value" };
+
+      // setup http call job message
+      const httpCall = E.getOrElseW(_ => fail("Failed to decode input"))(
+        HttpCallStruct.decode({
+          // @ts-ignore because address() could be a string, but it's never
+          url: `http://localhost:${server.address().port}${path}`,
+          headers,
+          body
+        })
+      );
+
+      // spy on server incoming requests and produce an easy-to-read struct with spied data
+      const spiedRequest = jest.fn();
+      server.on("request", async req => {
+        const body = await getBody(req);
+        spiedRequest({
+          url: req.url,
+          headers: req.headers,
+          body
+        });
+      });
+
+      // run the job (expecting http call to be performed correctly)
+      await HttpCallJob(mockContext, httpCall);
+
+      // checks
+      expect(spiedRequest).toBeCalledTimes(1);
+      const { headers: receivedHeaders } = spiedRequest.mock.calls[0][0];
+      expect(receivedHeaders).toEqual(
+        expect.objectContaining({ connection: "keep-alive" })
+      );
+    }));
 });
