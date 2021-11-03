@@ -48,7 +48,7 @@ const index: AzureFunction = withJsonInput(
                     // if an error occurs in downstream services, we should not retry the job as it may lead to unordered events
                     if (!is2xx(r)) {
                       context.log.warn(
-                        `${logPrefix}|unexpected webhook response|code:${r.statusCode}`
+                        `${logPrefix}|unexpected webhook response|code:${r.statusCode}|url:${url.href}`
                       );
                     }
                     return r;
@@ -57,7 +57,9 @@ const index: AzureFunction = withJsonInput(
               E.toError
             ),
           TE.mapLeft(err => {
-            context.log.error(`${logPrefix}|failed http call|${err.message}`);
+            context.log.error(
+              `${logPrefix}|failed http call|${err.message}|error:${err.message}`
+            );
             return err;
           })
         )
