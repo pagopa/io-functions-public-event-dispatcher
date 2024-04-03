@@ -4,9 +4,6 @@ on:
       environment:
         type: string
         required: true
-      tf_environment:
-        type: string
-        required: false
       dir:
         type: string
         required: true
@@ -21,7 +18,6 @@ env:
   ARM_USE_OIDC: true
   ARM_USE_AZUREAD: true
   ARM_STORAGE_USE_AZUREAD: true
-  TERRAFORM_ENVIRONMENT: ${{ inputs.tf_environment || inputs.environment }}
 
 jobs:
 
@@ -97,7 +93,7 @@ jobs:
       id-token: write
       contents: read
     env:
-      ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:

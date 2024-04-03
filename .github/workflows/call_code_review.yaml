@@ -75,7 +75,7 @@ jobs:
         working-directory: ${{ inputs.dir }}
         run: |
           terraform plan -lock-timeout=3000s -no-color | tee plan_output.txt
-          OUTPUT=$(grep -Ev "Refreshing state|state lock|Reading|Read" plan_output.txt | tail -c 60000)
+          OUTPUT=$(grep -Ev "Refreshing state|state lock|Reading|Read|Still reading" plan_output.txt | tail -c 60000)
           echo "$OUTPUT" > plan_output_multiline.txt
 
       - uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
