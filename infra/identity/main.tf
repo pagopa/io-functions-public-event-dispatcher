@@ -31,3 +31,21 @@ module "federated_identities" {
 
   tags = local.tags
 }
+
+resource "azurerm_key_vault_access_policy" "ci_kv_policy" {
+  key_vault_id = data.azurerm_key_vault.key_vault.id
+
+  tenant_id = data.azurerm_client_config.current.tenant_id
+  object_id = module.federated_identities.federated_ci_identity.id
+
+  secret_permissions = ["Get", "List"]
+}
+
+resource "azurerm_key_vault_access_policy" "cd_kv_policy" {
+  key_vault_id = data.azurerm_key_vault.key_vault.id
+
+  tenant_id = data.azurerm_client_config.current.tenant_id
+  object_id = module.federated_identities.federated_cd_identity.id
+
+  secret_permissions = ["Get", "List"]
+}
