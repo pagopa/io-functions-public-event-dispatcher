@@ -5,19 +5,19 @@ on:
   pull_request:
     types:
       - opened
-      - edited
       - synchronize
       - reopened
       - ready_for_review
     paths:
-      - "infra/function_app_dispatcher/**"
+      - "infra/resources/**"
       - ".github/workflows/dispatcher_**"
 
 jobs:
   code_review_prod:
-    uses: ./.github/workflows/call_code_review.yaml
-    name: Terraform Plan
+    uses: pagopa/dx/.github/workflows/infra_plan.yaml@main
+    name: PR Prod WestEurope
     secrets: inherit
     with:
       environment: prod
-      dir: "infra/function_app_dispatcher"
+      region: westeurope
+      base_path: infra/resources

@@ -6,13 +6,14 @@ on:
     branches:
       - main
     paths:
-      - "infra/function_app_dispatcher/**"
+      - "infra/resources/**"
 
 jobs:
   release_prod:
-    uses: ./.github/workflows/call_release.yaml
-    name: Terraform Apply
+    uses: pagopa/dx/.github/workflows/infra_apply.yaml@main
+    name: Release Prod WestEurope
     secrets: inherit
     with:
       environment: prod
-      dir: "infra/function_app_dispatcher"
+      region: westeurope
+      base_path: infra/resources
