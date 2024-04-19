@@ -59,3 +59,11 @@ generated
 .eslintcache
 
 azure-functions-core-tools
+
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json

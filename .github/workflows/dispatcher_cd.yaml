@@ -1,0 +1,19 @@
+name: (CD) Dispatcher
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "infra/resources/**"
+
+jobs:
+  release_prod:
+    uses: pagopa/dx/.github/workflows/infra_apply.yaml@main
+    name: Release Prod WestEurope
+    secrets: inherit
+    with:
+      environment: prod
+      region: westeurope
+      base_path: infra/resources
