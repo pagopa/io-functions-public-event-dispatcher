@@ -1,5 +1,5 @@
 module "function_pblevtdispatcher_snetout_v4" {
-  source = "github.com/pagopa/terraform-azurerm-v3//subnet?ref=v7.76.0"
+  source = "github.com/pagopa/terraform-azurerm-v3//subnet?ref=v8.4.0"
 
   name                 = "fnpblevtdispatcherv4out"
   address_prefixes     = local.cidr_subnet_fnpblevtdispatcherv4

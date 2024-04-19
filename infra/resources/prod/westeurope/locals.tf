@@ -15,6 +15,6 @@ locals {
     Environment    = "Prod"
     Owner          = "IO"
     ManagementTeam = "IO Platform"
-    Source         = "https://github.com/pagopa/io-functions-public-event-dispatcher/blob/main/infra/function_app_dispatcher"
+    Source         = "https://github.com/pagopa/io-functions-public-event-dispatcher/blob/main/infra/resources/prod/westeurope"
   }
 }

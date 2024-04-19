@@ -1,5 +1,5 @@
 module "function_pblevtdispatcher_v4" {
-  source = "github.com/pagopa/terraform-azurerm-v3//function_app?ref=v7.76.0"
+  source = "github.com/pagopa/terraform-azurerm-v3//function_app?ref=v8.4.0"
 
   resource_group_name = azurerm_resource_group.pblevtdispatcher_rg.name
   name                = format("%s-pblevtdispatcher-fn", local.project)
@@ -58,7 +58,8 @@ module "function_pblevtdispatcher_v4" {
     "AzureWebJobs.OnIncomingEvent.Disabled" = "1"
   }
 
-  subnet_id = module.function_pblevtdispatcher_snetout_v4.id
+  subnet_id                     = module.function_pblevtdispatcher_snetout_v4.id
+  ip_restriction_default_action = "Deny"
 
   allowed_subnets = [
     data.azurerm_subnet.azdoa_snet.id,
