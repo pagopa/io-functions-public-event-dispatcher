@@ -11,7 +11,7 @@ on:
   push:
     branches:
       - EC-401-devops-decommissioning
-
+      
 jobs:
   js_code_review:
     runs-on: ubuntu-22.04
