@@ -11,7 +11,10 @@ on:
   push:
     branches:
       - EC-401-devops-decommissioning
-      
+
+env:
+  DANGER_GITHUB_API_TOKEN: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
+
 jobs:
   js_code_review:
     runs-on: ubuntu-22.04
@@ -52,12 +55,12 @@ jobs:
 
       # Check where find DANGER_GITHUB_API_TOKEN secret
       - name: Danger CI
-        if: ${{ secrets.DANGER_GITHUB_API_TOKEN != '' }}
-        env:
-          DANGER_GITHUB_API_TOKEN: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
+        if: ${{ env.DANGER_GITHUB_API_TOKEN != '' }}
         run: yarn danger ci
         shell: bash
-
+        env:
+          DANGER_GITHUB_API_TOKEN: ${{ env.DANGER_GITHUB_API_TOKEN }}
+          
       - name: Unit tests exec
         run: yarn test:coverage
 
