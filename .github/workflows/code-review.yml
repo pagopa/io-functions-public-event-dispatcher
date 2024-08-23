@@ -8,15 +8,12 @@ on:
       - "*"
       - "!infra/*"
       - "!.github/*"
-  push:
-    branches:
-      - EC-401-devops-decommissioning
 
 env:
   DANGER_GITHUB_API_TOKEN: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
 
 jobs:
-  js_code_review:
+  code_review:
     runs-on: ubuntu-22.04
 
     steps:
@@ -50,9 +47,6 @@ jobs:
       - name: Lint
         run: yarn lint
 
-      # - name: Generate models
-      #   run: yarn generate
-
       # Check where find DANGER_GITHUB_API_TOKEN secret
       - name: Danger CI
         if: ${{ env.DANGER_GITHUB_API_TOKEN != '' }}
@@ -77,11 +71,11 @@ jobs:
           token: ${{ env.CODECOV_TOKEN }}
 
       - name: Set up Docker
-        uses: docker/setup-buildx-action@988b5a0280414f521da01fcc63a27aeeb4b104db
+        uses: docker/setup-buildx-action@988b5a0280414f521da01fcc63a27aeeb4b104db #v4
   
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@49b3bc8e6bdd4a60e6116a5414239cba5943d3cf
-        
+        uses: docker/setup-qemu-action@49b3bc8e6bdd4a60e6116a5414239cba5943d3cf #v4
+
       - name: Install Docker Compose
         run: |
           sudo apt-get update
