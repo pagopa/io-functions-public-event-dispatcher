@@ -79,16 +79,16 @@ jobs:
       - name: Start test resources
         run: |-
           cd __integrations__
-          yarn docker-compose up -d
+          npx docker-compose up -d
 
       - name: Execute tests
         run: |-
           cd __integrations__
           yarn install --frozen-lockfile
-          yarn docker exec integrations___testagent_1 yarn start
+          npx docker exec integrations___testagent_1 yarn start
           #           ^^^ FIXME: reference container using a less arbitrary name
 
       - name: Shutdown test resources
         run: |-
           cd __integrations__
-          yarn docker-compose down
+          npx docker-compose down
