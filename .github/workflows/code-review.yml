@@ -8,6 +8,9 @@ on:
       - "*"
       - "!infra/*"
       - "!.github/*"
+  push:
+    branches:
+      - EC-401-devops-decommissioning
 
 env:
   DANGER_GITHUB_API_TOKEN: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
@@ -84,16 +87,16 @@ jobs:
       - name: Start test resources
         run: |-
           cd __integrations__
-          /usr/bin/docker-compose up -d
+          docker-compose up -d
 
       - name: Execute tests
         run: |-
           cd __integrations__
           yarn install --frozen-lockfile
-          /usr/bin/docker exec integrations___testagent_1 yarn start
+          docker exec integrations___testagent_1 yarn start
           #           ^^^ FIXME: reference container using a less arbitrary name
 
       - name: Shutdown test resources
         run: |-
           cd __integrations__
-          /usr/bin/docker-compose down
+          docker-compose down
