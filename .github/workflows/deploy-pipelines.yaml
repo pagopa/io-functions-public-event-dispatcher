@@ -98,19 +98,12 @@ jobs:
           tenant-id: ${{ secrets.ARM_TENANT_ID }}
           subscription-id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
 
-      # - name: Deploy to Production Slot
-      #   run: |
-      #     az webapp deploy \
-      #       --resource-group ${{ inputs.resource_group_name }} \
-      #       --name ${{ inputs.app_name }} \
-      #       --slot production \
-      #       --src-path  ${{ github.workspace }}/${{ env.BUNDLE_NAME }}.zip \
-      #       --type zip \
-      #       --async false
-
-      - name: Deploy TEST
+      - name: Deploy to Production Slot
         run: |
-          az webapp up \
-            --dryrun \
+          az webapp deploy \
             --resource-group ${{ inputs.resource_group_name }} \
             --name ${{ inputs.app_name }} \
+            --slot production \
+            --src-path  ${{ github.workspace }}/${{ env.BUNDLE_NAME }}.zip \
+            --type zip \
+            --async false
