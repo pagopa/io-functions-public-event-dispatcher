@@ -8,9 +8,6 @@ on:
       - "*"
       - "!infra/*"
       - "!.github/*"
-  push:
-    branches:
-      - EC-401-devops-decommissioning
 
 env:
   DANGER_GITHUB_API_TOKEN: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
