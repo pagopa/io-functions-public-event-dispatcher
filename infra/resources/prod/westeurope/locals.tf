@@ -17,4 +17,12 @@ locals {
     ManagementTeam = "IO Platform"
     Source         = "https://github.com/pagopa/io-functions-public-event-dispatcher/blob/main/infra/resources/prod/westeurope"
   }
+  itn_environment = {
+    prefix    = local.prefix
+    env_short = local.env_short
+    location  = local.location
+    # domain          = "cgn"
+    instance_number = "01"
+  }
 }
+
