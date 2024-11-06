@@ -24,7 +24,7 @@ module "azure_storage_account" {
   source = "github.com/pagopa/dx//infra/modules/azure_storage_account?ref=main"
 
   environment         = local.itn_environment
-  resource_group_name = local.resource_group_name
+  resource_group_name = var.resource_group_name ###TO CHECK
   access_tier         = "Hot"
 
   subservices_enabled = {
