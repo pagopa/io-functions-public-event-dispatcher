@@ -3,6 +3,8 @@ locals {
   env_short = "p"
   project   = "${local.prefix}-${local.env_short}"
   location  = "westeurope"
+  app_name  = "ex"
+
 
   cidr_subnet_fnpblevtdispatcherv4 = ["10.0.15.64/26"]
 
@@ -18,10 +20,11 @@ locals {
     Source         = "https://github.com/pagopa/io-functions-public-event-dispatcher/blob/main/infra/resources/prod/westeurope"
   }
   itn_environment = {
-    prefix    = local.prefix
-    env_short = local.env_short
-    location  = local.location
-    # domain          = "cgn"
+    prefix          = local.prefix
+    env_short       = local.env_short
+    location        = local.location
+    domain          = "cgn"
+    app_name        = local.app_name
     instance_number = "01"
   }
 }
