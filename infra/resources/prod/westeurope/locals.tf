@@ -20,11 +20,11 @@ locals {
     Source         = "https://github.com/pagopa/io-functions-public-event-dispatcher/blob/main/infra/resources/prod/westeurope"
   }
   itn_environment = {
-    prefix          = local.prefix
-    env_short       = local.env_short
-    location        = local.location
-    domain          = "cgn"
-    app_name        = local.app_name
+    prefix    = local.prefix
+    env_short = local.env_short
+    location  = local.location
+    # domain          = "stpblevtdispatcher"
+    app_name        = "stpblevtdispatcher"
     instance_number = "01"
   }
 }
