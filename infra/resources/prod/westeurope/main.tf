@@ -18,3 +18,7 @@ terraform {
 provider "azurerm" {
   features {}
 }
+
+module "common_values" {
+  source = "github.com/pagopa/io-infra//src/_modules/common_values?ref=main"
+}
