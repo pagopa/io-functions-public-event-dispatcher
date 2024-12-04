@@ -20,7 +20,7 @@ resource "azurerm_storage_queue" "storage_account_pblevtdispatcher_http_call_job
   storage_account_name = module.storage_account_pblevtdispatcher.name
 }
 
-module "azure_storage_account" {
+module "storage_account_pblevtdispatcher_itn" {
   source = "github.com/pagopa/dx//infra/modules/azure_storage_account?ref=main"
 
   environment                          = local.itn_environment
@@ -40,4 +40,9 @@ module "azure_storage_account" {
   force_public_network_access_enabled = true
 
   tags = local.tags
+}
+
+resource "azurerm_storage_queue" "storage_account_pblevtdispatcher_http_call_jobs_queue_itn" {
+  name                 = "httpcalljobqueue"
+  storage_account_name = module.storage_account_pblevtdispatcher_itn.name
 }
