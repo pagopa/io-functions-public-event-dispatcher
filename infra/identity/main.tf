@@ -19,33 +19,33 @@ provider "azurerm" {
   }
 }
 
-module "federated_identities" {
-  source = "github.com/pagopa/dx//infra/modules/azure_federated_identity_with_github?ref=DEVEX-50-produrre-una-configurazione-terraform-per-le-identity-git-hub-per-autorizzare-le-modifiche-di-infrastruttura-tramite-pipeline"
+# module "federated_identities" {
+#   source = "github.com/pagopa/dx//infra/modules/azure_federated_identity_with_github?ref=DEVEX-50-produrre-una-configurazione-terraform-per-le-identity-git-hub-per-autorizzare-le-modifiche-di-infrastruttura-tramite-pipeline"
 
-  prefix    = local.prefix
-  env_short = local.env_short
-  env       = local.env
-  domain    = local.domain
+#   prefix    = local.prefix
+#   env_short = local.env_short
+#   env       = local.env
+#   domain    = local.domain
 
-  repositories = [local.repo_name]
+#   repositories = [local.repo_name]
 
-  tags = local.tags
-}
+#   tags = local.tags
+# }
 
-resource "azurerm_key_vault_access_policy" "ci_kv_policy" {
-  key_vault_id = data.azurerm_key_vault.key_vault.id
+# resource "azurerm_key_vault_access_policy" "ci_kv_policy" {
+#   key_vault_id = data.azurerm_key_vault.key_vault.id
 
-  tenant_id = data.azurerm_client_config.current.tenant_id
-  object_id = module.federated_identities.federated_ci_identity.id
+#   tenant_id = data.azurerm_client_config.current.tenant_id
+#   object_id = module.federated_identities.federated_ci_identity.id
 
-  secret_permissions = ["Get", "List"]
-}
+#   secret_permissions = ["Get", "List"]
+# }
 
-resource "azurerm_key_vault_access_policy" "cd_kv_policy" {
-  key_vault_id = data.azurerm_key_vault.key_vault.id
+# resource "azurerm_key_vault_access_policy" "cd_kv_policy" {
+#   key_vault_id = data.azurerm_key_vault.key_vault.id
 
-  tenant_id = data.azurerm_client_config.current.tenant_id
-  object_id = module.federated_identities.federated_cd_identity.id
+#   tenant_id = data.azurerm_client_config.current.tenant_id
+#   object_id = module.federated_identities.federated_cd_identity.id
 
-  secret_permissions = ["Get", "List"]
-}
+#   secret_permissions = ["Get", "List"]
+# }
