@@ -1,0 +1,15 @@
+name: Deploy Pipelines - PROD
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy_on_prod:
+    uses: ./.github/workflows/deploy-pipelines.yaml
+    name: Deploy on PROD
+    secrets: inherit
+    with:
+      environment: 'prod'
+      resource_group_name: 'io-p-pblevtdispatcher-rg'
+      app_name: 'io-p-fn-pblevtdispatcher'
+      use_private_agent: false
